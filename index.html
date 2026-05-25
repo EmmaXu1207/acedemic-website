@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academic Homepage | Emma Jiayi Xu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            /* 根据色卡精准定制的色系（绝不带死板灰色） */
+            --bg-dark-cosmic: #0e162f;       /* 从下往数第1个：深邃夜空蓝 */
+            --bg-purple-mist: #2d2e43;       /* 从下往数第3个：你提到的偏紫星空底色 */
+            --bg-image: url('starry-sky.jpg'); 
+            
+            --card-bg: rgba(21, 37, 94, 0.75); /* 带有暮蓝调的半透明卡片 */
+            --nav-bg: rgba(20, 36, 84, 0.9);
+            
+            /* 调色升级：严格遵循色卡上方的古典土黄/浅金，优雅内敛 */
+            --accent-gold: #f5bb6b;          /* 色卡上方高质感土黄 */
+            --accent-gold-light: #f6e0bb;    /* 色卡最上方的奶麦黄色 */
+            --accent-gold-glow: rgba(226, 179, 114, 0.2);
+            
+            --text-main: #f8fafc;
+            --text-muted: #b1d0df;           /* 带有暮蓝调的浅色字，绝非纯灰 */
+            --border-color: rgba(238, 177, 92, 0.15);
+            --transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            /* 💡 手动微调覆盖层透明度：这里的 0.35 和 0.55 可以随意改动来调亮背景图 */
+            background-image: linear-gradient(rgba(14, 22, 47, 0.35), rgba(14, 22, 47, 0.8)), var(--bg-image);
+            background-color: var(--bg-dark-cosmic);
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            color: var(--text-main);
+            line-height: 1.7;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* 顶部导航：磨砂玻璃 */
+        nav {
+            position: fixed;
+            top: 0; width: 100%;
+            background: var(--nav-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 1.2rem 10%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            color: var(--text-main);
+            font-weight: 700;
+        }
+
+        .logo span { color: var(--accent-gold); }
+
+        .nav-links { display: flex; gap: 3rem; }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .nav-links a:hover, .nav-links a.active { color: var(--text-main); }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -6px; left: 0; width: 0; height: 2px;
+            background: var(--accent-gold);
+            transition: var(--transition);
+        }
+
+        .nav-links a.active::after, .nav-links a:hover::after { width: 100%; }
+
+        /* 💡 参考图1的全局高级排版：通栏大横幅 Banner */
+        .hero-banner {
+            width: 100%;
+            height: 0px;
+            background: linear-gradient(135deg, var(--bg-purple-mist), #1a2342);
+            border-bottom: 1px solid var(--border-color);
+            margin-top: 65px; /* 避开导航栏 */
+        }
+
+        .container {
+            max-width: 1050px;
+            margin: 0 auto 80px;
+            padding: 0 24px;
+            position: relative;
+        }
+
+        .page-section {
+            display: none;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .page-section.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 💡 首页网格：头像跨界重叠排版 */
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 4.5rem;
+            align-items: end;
+        }
+
+        .profile-container { position: relative; }
+
+        .profile-img {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            border-radius: 12px;
+            object-fit: cover;
+            border: 4px solid var(--bg-dark-cosmic); /* 用底色做一道护城河线 */
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            background: #1e293b;
+        }
+
+        .hero-text { margin-top: 120px; } /* 让文字在Banner下方优雅排开 */
+
+        .hero-text h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            margin-bottom: 0.6rem;
+            color: var(--text-main);
+        }
+
+        .hero-text .subtitle {
+            font-size: 1.15rem;
+            color: var(--accent-gold);
+            font-weight: 500;
+            margin-bottom: 1.8rem;
+            display: block;
+            letter-spacing: 1px;
+        }
+
+        .hero-text p { color: var(--text-muted); font-size: 1.05rem; margin-bottom: 2rem; }
+
+        .contact-list { list-style: none; }
+        .contact-list li { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; color: var(--text-muted); font-size: 0.95rem; }
+        .contact-list i { color: var(--accent-gold); width: 20px; }
+
+        .section-header {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            margin-bottom: 2.5rem;
+            position: relative;
+            display: inline-block;
+            padding-bottom: 8px;
+            margin-top: 50px; /* 配合Banner调整间距 */
+        }
+
+        .section-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; width: 60px; height: 2px;
+            background: var(--accent-gold);
+        }
+
+        /* 💡 研究板块网格结构 */
+        .research-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            align-items: start;
+        }
+
+        /* 💡 满足需求2：悬停卡片整体顺滑变大 */
+        .research-card {
+            background: var(--card-bg);
+            padding: 2.2rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .research-card h3 { color: var(--text-main); margin-bottom: 0.8rem; font-size: 1.25rem; transition: var(--transition); }
+
+        /* 💡 悬停时：显示更多文字和图片 */
+        .research-more {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .research-img {
+            width: 100%;
+            margin-top: 15px;
+            border-radius: 6px;
+            border: 1px solid rgba(255,255,255,0.1);
+            display: block;
+        }
+
+        .research-card:hover {
+            transform: scale(1.04); /* 卡片温和放大 */
+            border-color: var(--accent-gold);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .research-card:hover h3 { color: var(--accent-gold); }
+
+        .research-card:hover .research-more {
+            max-height: 500px; /* 展开高度 */
+            opacity: 1;
+            margin-top: 15px;
+        }
+
+        .hobbie-img {
+            width: 50%;
+            margin-top: 15px;
+            border-radius: 6px;
+            border: 1px solid rgba(255,255,255,0.1);
+            display: block;
+        }
+
+        /* 💡 满足需求3：Skills 盒子完全被提出在网格外部，实现完美的横向等宽对齐 */
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(22, 29, 54, 0.9), var(--bg-purple-mist));
+            border-left: 4px solid var(--accent-gold);
+            padding: 2.2rem;
+            border-radius: 0 12px 12px 0;
+            margin-top: 3.5rem;
+            width: 100%;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+        }
+
+        .highlight-box h4 { margin-bottom: 0.8rem; color: var(--accent-gold-light); font-size: 1.2rem; }
+        .highlight-box p { color: var(--text-main); margin-bottom: 0; }
+
+        /* 学术时间轴 */
+        .timeline { position: relative; padding-left: 2.5rem; }
+        .timeline::before { content: ''; position: absolute; left: 5px; top: 0; bottom: 0; width: 1px; background: rgba(255,255,255,0.1); }
+        .timeline-item { position: relative; margin-bottom: 3rem; }
+        .timeline-item::before { content: ''; position: absolute; left: calc(-2.5rem + 1px); top: 8px; width: 8px; height: 8px; border-radius: 50%; background: var(--accent-gold); box-shadow: 0 0 8px var(--accent-gold); }
+        .timeline-year { font-weight: 700; color: var(--accent-gold); display: block; font-size: 1rem; margin-bottom: 0.3rem; }
+        .timeline-title { font-weight: 600; font-size: 1.2rem; color: var(--text-main); }
+        .timeline-univ { color: var(--text-muted); font-size: 0.95rem; }
+
+        .pub-list { list-style: none; }
+        .pub-item { background: var(--card-bg); padding: 1.5rem 2rem; border-radius: 8px; margin-bottom: 1.2rem; border: 1px solid rgba(255,255,255,0.02); transition: var(--transition); }
+        .pub-item:hover { transform: translateX(5px); border-color: rgba(255,255,255,0.1); }
+
+        @media (max-width: 768px) {
+            .hero-grid { grid-template-columns: 1fr; text-align: center; gap: 2rem; margin-top: -60px; }
+            .profile-container { max-width: 220px; margin: 0 auto; }
+            .hero-text { margin-top: 20px; }
+            .nav-links { gap: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">Astronomy<span>.</span> Instrumentation</div>
+        <div class="nav-links">
+            <a onclick="switchTab('home')" id="nav-home" class="active">Home</a>
+            <a onclick="switchTab('research')" id="nav-research">Research</a>
+            <a onclick="switchTab('academy')" id="nav-academy">Academy</a>
+            <a onclick="switchTab('about')" id="nav-about">About Me</a>
+        </div>
+    </nav>
+
+    <div class="hero-banner"></div>
+
+    <div class="container">
+        
+        <!-- 1. 首页板块 -->
+        <section id="home" class="page-section active">
+            <div class="hero-grid">
+                <div class="profile-container">
+                    <!-- 将你的蓝色背景照片命名为 avatar.jpg 放在同一文件夹下即可 -->
+                    <img src="avatar.jpg" alt="Profile Academic Photo" class="profile-img">
+                </div>
+                <div class="hero-text">
+                    <span class="subtitle">MSc student / Researcher </span>
+                    <h1>Jiayi (Emma) Xu</h1>
+                    <!-- <h2>徐嘉仪</h2> -->
+                    <ul class="contact-list">
+                        <li><i class="fa-solid fa-graduation-cap"></i> Department of physics, University of Toronto</li>
+                        <li><i class="fa-solid fa-envelope"></i> emmajiayi.xu@mail.utoronto.ca</li>
+                        <li><i class="fa-solid fa-location-dot"></i> Toronto, ON, Canada</li>
+                    </ul>
+                </div>
+                <span class="'text">more about me</span>
+                <p>jdfgsdfjdjsfffffff</p>
+            </div>
+        </section>
+        <!---2. Research 页面-->
+        <section id="research" class="page-section">
+            <h2 class="section-header">Research Focus</h2>
+            
+            <div class="research-grid">
+                <div class="research-card">
+                    <h3>DMD-MOS</h3>
+                    <p>multi-object spectrograph</p>
+                    <div class="research-more">
+                        <p style="color: var(--text-muted); font-size: 0.95rem;">
+                            what is it?
+                        </p>
+                        <a href="https://www.dunlap.utoronto.ca/dmd-mos/">DMD-MOS website</a>
+                        <img src="research1.jpg" alt="Research Diagram" class="research-img"> 
+                    </div>
+                </div>
+
+                <div class="research-card">
+                    <h3>GigaBIT</h3>
+                    <p>ballon born telescope</p>
+                    <div class="research-more">
+                        <p style="color: var(--text-muted); font-size: 0.95rem;">
+                            what is it?
+                        </p>
+                        <img src="research2.jpg" alt="Research Diagram" class="research-img">
+                    </div>
+                </div>
+
+                <!-- <div class="research-card">
+                    <h3>跨领域物理/机器学习建模</h3>
+                    <p>探索将经典物理先验知识引入深度学习网络。</p>
+                    <div class="research-more">
+                        <p style="color: var(--text-muted); font-size: 0.95rem;">
+                            在保持模型高泛化能力的同时，大幅提升对非线性时序物理特征的捕捉精度。
+                        </p>
+                        <img src="research3.jpg" alt="Research Diagram" class="research-img">
+                    </div>
+                </div> -->
+            </div> <div class="highlight-box">
+                <h4>Core Research Skills & Strengths</h4>
+                <p>skills</p>
+            </div>
+        </section>
+
+        <!-- 3. 学术履历与成果页面 -->
+        <section id="academy" class="page-section">
+            <h2 class="section-header">Academic Journey</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <span class="timeline-year">2025-2026</span>
+                    <div class="timeline-title">Master of Science</div>
+                    <div class="timeline-univ">University of Toronto, Physics</div>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-year">2021-2025</span>
+                    <div class="timeline-title">Honor Bachelor of Science</div>
+                    <div class="timeline-univ">University of Toronto, Astronomy and Astrophysics</div>
+                </div>
+            </div>
+
+            <h2 class="section-header" style="margin-top: 4rem;">Selected Publications</h2>
+            <ul class="pub-list">
+                <li class="pub-item">
+                    <strong>Your Name</strong>, Co-author A, Co-author B. "Optimizing Data Transformations and Grid Alignment in Scientific Visualization Pipeline." <em>Journal of Computational Science</em>, 2025.
+                </li>
+                <li class="pub-item">
+                    Co-author A, <strong>Your Name</strong>. "An Automated Reduction Framework for High-Dimensional Instrumentation Data." <em>IEEE Conference on Data Engineering</em>, 2024.
+                </li>
+            </ul>
+
+            <!-- <h2 class="section-header" style="margin-top: 4rem;">Conferences</h2>
+            <ul class="pub-list">
+                <li class="pub-item">
+                    <strong>Your Name</strong>, Co-author A, Co-author B. "Optimizing Data Transformations and Grid Alignment in Scientific Visualization Pipeline." <em>Journal of Computational Science</em>, 2025.
+                </li>
+                <li class="pub-item">
+                    Co-author A, <strong>Your Name</strong>. "An Automated Reduction Framework for High-Dimensional Instrumentation Data." <em>IEEE Conference on Data Engineering</em>, 2024.
+                </li>
+            </ul>
+
+            <h2 class="section-header" style="margin-top: 4rem;">Talks</h2>
+            <ul class="pub-list">
+                <li class="pub-item">
+                    <strong>Your Name</strong>, Co-author A, Co-author B. "Optimizing Data Transformations and Grid Alignment in Scientific Visualization Pipeline." <em>Journal of Computational Science</em>, 2025.
+                </li>
+                <li class="pub-item">
+                    Co-author A, <strong>Your Name</strong>. "An Automated Reduction Framework for High-Dimensional Instrumentation Data." <em>IEEE Conference on Data Engineering</em>, 2024.
+                </li>
+            </ul> -->
+        </section>
+
+        <!-- 4. 关于我页面 -->
+        <section id="about" class="page-section">
+            <h2 class="section-header">About Me</h2>
+            <div class="about-content">
+                <p>
+                    Beside Academy, I also have lots of hobbies...
+                </p>
+                <p>
+                    Fun fact about me:
+                    <img src="Marathon.jpg" alt="Research Diagram" class="hobbie-img"> 
+                </p> 
+
+            
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        // SPA 丝滑无刷新切换逻辑
+        function switchTab(tabId) {
+            const sections = document.querySelectorAll('.page-section');
+            const links = document.querySelectorAll('.nav-links a');
+            
+            sections.forEach(section => {
+                if (section.classList.contains('active')) {
+                    section.style.opacity = '0';
+                    section.style.transform = 'translateY(15px)';
+                    setTimeout(() => { section.classList.remove('active'); }, 200);
+                }
+            });
+
+            links.forEach(link => link.classList.remove('active'));
+
+            setTimeout(() => {
+                const targetSection = document.getElementById(tabId);
+                targetSection.classList.add('active');
+                setTimeout(() => {
+                    targetSection.style.opacity = '1';
+                    targetSection.style.transform = 'translateY(0)';
+                }, 50);
+                document.getElementById('nav-' + tabId).classList.add('active');
+            }, 220);
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
