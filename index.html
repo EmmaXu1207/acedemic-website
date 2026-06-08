@@ -62,6 +62,7 @@
         .logo {
             font-family: 'Playfair Display', serif;
             font-size: 1.4rem;
+            /* border-left: 15cm; */
             color: var(--text-main);
             font-weight: 700;
         }
@@ -168,19 +169,38 @@
         .section-header {
             font-family: 'Playfair Display', serif;
             font-size: 2rem;
-            margin-bottom: 2.5rem;
             position: relative;
             display: inline-block;
             padding-bottom: 8px;
-            margin-top: 50px; /* 配合Banner调整间距 */
+            margin-top: 70px; /* 配合Banner调整间距 */
+            margin-bottom: 1rem !important; /* 缩短与展开内容的间距 */
+            transition: var(--transition);
         }
-
         .section-header::after {
             content: '';
             position: absolute;
             bottom: 0; left: 0; width: 60px; height: 2px;
             background: var(--accent-gold);
         }
+
+        .section-header-sub {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            position: relative;
+            display: inline-block;
+            padding-bottom: 8px;
+            margin-top: 1px; /* 配合Banner调整间距 */
+            margin-bottom: 1rem !important; /* 缩短与展开内容的间距 */
+            transition: var(--transition);
+        }
+        .section-header-sub::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; width: 60px; height: 2px;
+            background: var(--accent-gold);
+        }
+
+
 
         /* 💡 研究板块网格结构 */
         .research-grid {
@@ -235,9 +255,20 @@
         }
 
         .hobbie-img {
-            width: 50%;
+            width: 40%;
             margin-top: 15px;
             border-radius: 6px;
+            border: 1px solid rgba(255,255,255,0.1);
+            display: block;
+        }
+
+        .logl_pic {
+            width: 15%;
+            /* margin-top: 15px; */
+            border-radius: 6px;
+            aspect-ratio: 1 / 1;
+            /* border-radius: 12px; */
+            object-fit: cover;
             border: 1px solid rgba(255,255,255,0.1);
             display: block;
         }
@@ -255,6 +286,187 @@
 
         .highlight-box h4 { margin-bottom: 0.8rem; color: var(--accent-gold-light); font-size: 1.2rem; }
         .highlight-box p { color: var(--text-main); margin-bottom: 0; }
+
+
+        /* ==========================================
+        🔗 全局超链接美化（驯服死板蓝色）
+        ========================================== */
+        a {
+            color: var(--accent-gold);       /* 默认直接使用你的古典土黄/麦穗金 */
+            text-decoration: none;           /* 去掉那条死板的下划线 */
+            transition: var(--transition);   /* 让颜色变化时有丝滑的过渡效果 */
+            font-weight: 500;
+        }
+
+        /* 当鼠标悬停在链接上时 */
+        a:hover {
+            color: var(--accent-gold-light); /* 变成色卡最上方更亮更温柔的奶麦黄色 */
+            text-decoration: underline;      /* 悬停时才优雅地浮现一条下划线 */
+        }
+
+        /* 如果你想单独控制全屏详情页里长文章里的链接，可以这样写： */
+        .detail-content a {
+            color: #38bdf8;                  /* 在大段长文里，用色卡里的冰川蓝往往更醒目、更好看 */
+            border-bottom: 1px dashed rgba(56, 189, 248, 0.4); /* 虚线代替实线下划线，更高级 */
+        }
+        .detail-content a:hover {
+            color: var(--accent-gold);
+            border-bottom-color: var(--accent-gold);
+        }
+
+        /* ==========================================
+        ✨ 新增：全屏研究详情页样式
+        ========================================== */
+        .research-detail-page {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100vh;
+            background-color: var(--bg-dark-cosmic); /* 使用你的深色底 */
+            background-image: linear-gradient(rgba(14, 22, 47, 0.6), rgba(14, 22, 47, 0.8)), var(--bg-image); /* 同样带星空底 */
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            z-index: 2000; /* 确保盖在导航栏上面 */
+            
+            display: none; /* 默认隐藏 */
+            opacity: 0;
+            overflow-y: auto; /* 允许上下滚动 */
+            transition: opacity 0.5s ease;
+        }
+
+        /* 当激活时显现 */
+        .research-detail-page.active {
+            display: block;
+            opacity: 1;
+        }
+
+        /* 详情页内部居中容器 */
+        .detail-container {
+            max-width: 800px;
+            margin: 80px auto;
+            padding: 0 24px;
+            animation: textReveal 0.6s ease-out forwards;
+        }
+
+        /* 返回按钮样式：使用你的古董金/麦穗金 */
+        .back-btn {
+            background: none;
+            border: 1px solid var(--border-color);
+            color: var(--accent-gold);
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            margin-bottom: 2rem;
+            transition: var(--transition);
+        }
+
+        .back-btn:hover {
+            background: var(--card-bg);
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 10px var(--accent-gold-glow);
+        }
+
+        .detail-content h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            color: var(--text-main);
+            margin-bottom: 1.5rem;
+        }
+
+        .detail-content .detail-text {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            line-height: 1.8;
+        }
+
+        .detail-content img {
+            width: 100%;
+            border-radius: 12px;
+            margin-top: 2rem;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        /* 1. 悬停时显示的引言：默认隐藏，悬停时优雅淡入 */
+        .research-hover-text {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: var(--transition);
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* 当鼠标放上去时，只展开引言 */
+        .research-card:hover .research-hover-text {
+            max-height: 100px;
+            opacity: 1;
+            margin-top: 12px;
+        }
+
+        /* 2. 全屏才要显示的超级大图文：平时无论如何都绝对隐藏（display: none） */
+        .research-full-detail {
+            display: none;
+        }
+
+        /* ==========================================
+        ✨ 新增：学术历程标题折叠抽屉样式
+        ========================================== */
+
+        /* 让标题区域具备手势指针，并留出一些上下间距 */
+        .collapsible-header-wrapper {
+            cursor: pointer;
+            margin-top: 40px;
+            position: relative;
+            display: inline-block; /* 保证只有划到文字区域才触发 */
+        }
+
+
+        /* 💡 满足需求：鼠标放在 Header 上时，颜色变成古董金 */
+        .collapsible-header-wrapper:hover .section-header-sub {
+            color: var(--accent-gold);
+        }
+        .collapsible-header-wrapper:hover .section-header {
+            color: var(--accent-gold);
+        }
+
+        /* 在标题右侧隐约加一个极其低调的小箭头提示，更显精致 */
+        .collapsible-header-wrapper::after {
+            content: '\f107'; /* FontAwesome 向下箭头 */
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            right: -25px;
+            top: 8px;
+            font-size: 1rem;
+            color: var(--text-muted);
+            opacity: 0.4;
+            transition: var(--transition);
+        }
+        .collapsible-header-wrapper:hover::after {
+            color: var(--accent-gold);
+            opacity: 1;
+            transform: translateY(2px);
+        }
+
+        /* 💡 核心：默认隐藏的抽屉容器 */
+        .collapsible-content {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            padding-left: 5px; /* 稍微内缩，让排版更漂亮 */
+        }
+
+        /* 💡 悬停（Hover）在包裹层上时，内容顺滑流淌出来 */
+        /* 400px 是一个大概的展开高度，如果你的 Publication 特别多，可以把它改成 800px 或更高 */
+        .collapsible-header-wrapper:hover + .collapsible-content,
+        .collapsible-content:hover {
+            max-height: 1000px; 
+            opacity: 1;
+            margin-top: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
 
         /* 学术时间轴 */
         .timeline { position: relative; padding-left: 2.5rem; }
@@ -280,12 +492,16 @@
 <body>
 
     <nav>
+        <div class="logo">
+            <img src="Me.png" alt="personal logo" class="logl_pic">
+        </div>
         <div class="logo">Astronomy<span>.</span> Instrumentation</div>
+        <!-- </div> -->
         <div class="nav-links">
             <a onclick="switchTab('home')" id="nav-home" class="active">Home</a>
             <a onclick="switchTab('research')" id="nav-research">Research</a>
             <a onclick="switchTab('academy')" id="nav-academy">Academy</a>
-            <a onclick="switchTab('about')" id="nav-about">About Me</a>
+            <a onclick="switchTab('about')" id="nav-about">Beyond Academy</a>
         </div>
     </nav>
 
@@ -310,99 +526,178 @@
                         <li><i class="fa-solid fa-location-dot"></i> Toronto, ON, Canada</li>
                     </ul>
                 </div>
-                <span class="'text">more about me</span>
-                <p>jdfgsdfjdjsfffffff</p>
+                <!-- <span class="'text">more about me</span>
+                <p>jdfgsdfjdjsfffffff</p> -->
             </div>
         </section>
+
         <!---2. Research 页面-->
         <section id="research" class="page-section">
-            <h2 class="section-header">Research Focus</h2>
+            <h2 class="section-header">Research Projects</h2>
             
             <div class="research-grid">
-                <div class="research-card">
+                <div class="research-card" onclick="openResearchDetail(this)">
                     <h3>DMD-MOS</h3>
                     <p>multi-object spectrograph</p>
                     <div class="research-more">
                         <p style="color: var(--text-muted); font-size: 0.95rem;">
-                            what is it?
+                            what is it? <br><br>
+                            
                         </p>
                         <a href="https://www.dunlap.utoronto.ca/dmd-mos/">DMD-MOS website</a>
                         <img src="research1.jpg" alt="Research Diagram" class="research-img"> 
                     </div>
+                    <div class="research-hover-text">
+                        ✨ Click anywhere in the panel to check out more details about this research project
+                    </div>
+                    
+                    <div class="research-full-detail">
+                        <p class="detail-text">
+                            <!-- 这里可以撰写你极其详尽的项目解析、公式推导、学术突破点、以及长篇大论...
+                            <br><br>
+                            你甚至可以在这里加上很多长句、段落和具体的会议论文摘要。 -->
+                        </p>
+                        <img src="research1.jpg" alt="详细实验图解 1">
+                        <img src="research1_data.jpg" alt="详细实验图解 2">
+                    </div>
+                    
                 </div>
 
-                <div class="research-card">
+                <div class="research-card" onclick="openResearchDetail(this)">
                     <h3>GigaBIT</h3>
-                    <p>ballon born telescope</p>
+                    <p>Balloon Borne Telescope</p>
                     <div class="research-more">
                         <p style="color: var(--text-muted); font-size: 0.95rem;">
-                            what is it?
+                            what is it? <br><br>
+                            Filter selection
                         </p>
-                        <img src="research2.jpg" alt="Research Diagram" class="research-img">
+                        <a href="https://www.gigabitastro.com/">GigaBIT website</a>
+                        <img src="research2.jpg" alt="Research Diagram" class="research-img"> 
                     </div>
+                    <div class="research-hover-text">
+                        ✨ Click anywhere in the panel to check out more details about this research project
+                    </div>
+                    
+                    <div class="research-full-detail">
+                        <p class="detail-text">
+                            <!-- 这里可以撰写你极其详尽的项目解析、公式推导、学术突破点、以及长篇大论...
+                            <br><br>
+                            你甚至可以在这里加上很多长句、段落和具体的会议论文摘要。 -->
+                        </p>
+                        <img src="research2.jpg" alt="详细实验图解 1">
+                        <img src="research2_data.jpg" alt="详细实验图解 2">
+                    </div>
+                    
                 </div>
 
-                <!-- <div class="research-card">
-                    <h3>跨领域物理/机器学习建模</h3>
-                    <p>探索将经典物理先验知识引入深度学习网络。</p>
-                    <div class="research-more">
-                        <p style="color: var(--text-muted); font-size: 0.95rem;">
-                            在保持模型高泛化能力的同时，大幅提升对非线性时序物理特征的捕捉精度。
-                        </p>
-                        <img src="research3.jpg" alt="Research Diagram" class="research-img">
-                    </div>
-                </div> -->
-            </div> <div class="highlight-box">
-                <h4>Core Research Skills & Strengths</h4>
-                <p>skills</p>
-            </div>
+
+                </div> <div class="highlight-box">
+                    <h4>Research Insterests</h4>
+                    <p>Optics related astronomical instrumentation: Design, Assembly, Test, Measure</p>
+                    <!-- <p>11</p> -->
+
+                </div> <div class="highlight-box">
+                    <h4>Core Research Skills & Strengths</h4>
+                    <p>skills</p>
+                </div>
         </section>
 
         <!-- 3. 学术履历与成果页面 -->
         <section id="academy" class="page-section">
-            <h2 class="section-header">Academic Journey</h2>
-            <div class="timeline">
-                <div class="timeline-item">
-                    <span class="timeline-year">2025-2026</span>
-                    <div class="timeline-title">Master of Science</div>
-                    <div class="timeline-univ">University of Toronto, Physics</div>
-                </div>
-                <div class="timeline-item">
-                    <span class="timeline-year">2021-2025</span>
-                    <div class="timeline-title">Honor Bachelor of Science</div>
-                    <div class="timeline-univ">University of Toronto, Astronomy and Astrophysics</div>
+    
+            <div class="collapsible-header-wrapper">
+                <h2 class="section-header">Academic Journey</h2>
+            </div>
+            <div class="collapsible-content">
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <span class="timeline-year">2025 - 2026</span>
+                        <div class="timeline-title">Master of Science</div>
+                        <div class="timeline-univ">University of Toronto, Physics</div>
+                    </div>
+                    <div class="timeline-item">
+                        <span class="timeline-year">2021 - 2025</span>
+                        <div class="timeline-title">Honor Bachelor of Science [High Distinction]</div>
+                        <div class="timeline-univ">University of Toronto, Astronomy and Astrophysics</div>
+                    </div>
                 </div>
             </div>
-
-            <h2 class="section-header" style="margin-top: 4rem;">Selected Publications</h2>
-            <ul class="pub-list">
-                <li class="pub-item">
-                    <strong>Your Name</strong>, Co-author A, Co-author B. "Optimizing Data Transformations and Grid Alignment in Scientific Visualization Pipeline." <em>Journal of Computational Science</em>, 2025.
-                </li>
-                <li class="pub-item">
-                    Co-author A, <strong>Your Name</strong>. "An Automated Reduction Framework for High-Dimensional Instrumentation Data." <em>IEEE Conference on Data Engineering</em>, 2024.
-                </li>
-            </ul>
-
-            <!-- <h2 class="section-header" style="margin-top: 4rem;">Conferences</h2>
-            <ul class="pub-list">
-                <li class="pub-item">
-                    <strong>Your Name</strong>, Co-author A, Co-author B. "Optimizing Data Transformations and Grid Alignment in Scientific Visualization Pipeline." <em>Journal of Computational Science</em>, 2025.
-                </li>
-                <li class="pub-item">
-                    Co-author A, <strong>Your Name</strong>. "An Automated Reduction Framework for High-Dimensional Instrumentation Data." <em>IEEE Conference on Data Engineering</em>, 2024.
-                </li>
-            </ul>
-
-            <h2 class="section-header" style="margin-top: 4rem;">Talks</h2>
-            <ul class="pub-list">
-                <li class="pub-item">
-                    <strong>Your Name</strong>, Co-author A, Co-author B. "Optimizing Data Transformations and Grid Alignment in Scientific Visualization Pipeline." <em>Journal of Computational Science</em>, 2025.
-                </li>
-                <li class="pub-item">
-                    Co-author A, <strong>Your Name</strong>. "An Automated Reduction Framework for High-Dimensional Instrumentation Data." <em>IEEE Conference on Data Engineering</em>, 2024.
-                </li>
-            </ul> -->
+        
+            <div class="collapsible-header-wrapper">
+                <h2 class="section-header-sub"> Awards & Honors</h2>
+            </div>
+            <div class="collapsible-content">
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <span class="timeline-year">2025-2026</span>
+                        <div class="timeline-title">Univerisity of Toronto Fellowship (UTF)</div>
+                        <div class="timeline-univ"> $24658 CAD, University of Toronto, School of Graduate Study.
+                            <br> Fellowship for Master degree student of the Department of physics</div>
+                    </div>
+                    <div class="timeline-item">
+                        <span class="timeline-year">2025</span>
+                        <div class="timeline-title">SURP Scholarship</div>
+                        <div class="timeline-univ"> $10880 CAD, University of Toronto, Dunlap Department of Astronomy and Astrophyiscs.
+                            <br> Summer Undergraduate Research Program Scholarship in Astronomy & Astrophysics</div>
+                    </div>
+                    <div class="timeline-item">
+                        <span class="timeline-year">2024</span>
+                        <div class="timeline-title">NSERC-USRA Scholarship</div>
+                        <div class="timeline-univ"> $7500 CAD, Canadian Government and Unversity of Toronto. 
+                            <br> Natural Sciences and Engineering Research Council of Canada – Undergraduate Student Research Award</div>
+                    </div>
+                    <div class="timeline-item">
+                        <span class="timeline-year">2024</span>
+                        <div class="timeline-title">The Roy Alvin Hope Scholarship</div>
+                        <div class="timeline-univ"> $1000 CAD, Unversity of Toronto, Victoria College.
+                            <br> Award for third-year students with a Cumulative GPA above 3.5/4.0</div>
+                    </div>
+                    <div class="timeline-item">
+                        <span class="timeline-year">2023</span>
+                        <div class="timeline-title">Regents in-course Scholarship [High Distinction]</div>
+                        <div class="timeline-univ">$1000 CAD, Unversity of Toronto, Victoria College.
+                            <br> Award for second-year students with a Cumulative GPA above 3.5/4.0</div>
+                    </div>
+                </div>
+            </div>
+                    
+            <div class="collapsible-header-wrapper">
+                <h2 class="section-header-sub"> Selected Publications</h2>
+            </div>
+            <div class="collapsible-content">
+                <ul class="pub-list">
+                    <li class="pub-item">
+                        <strong>Jiayi E. Xu</strong>, Sarik Jeram, Shaojie Chen, Ziang Zhang,
+                        "Prototyping the next-generation spectrograph for space exploration: Digital Micromirror Device based 
+                        Multi-object Spectrograph (DMD-MOS) calibration and performance assessment." 
+                        <em>SPIE Astronomy Telescopes + Instruments</em>, 2026.
+                    <li class="pub-item">
+                        Sarik Jeram, <strong>Jiayi E. Xu</strong>. "An Automated Reduction Framework for High-Dimensional Instrumentation Data." 
+                        <em>IEEE Conference on Data Engineering</em>, 2024.
+                    </li>
+                    <li class="pub-item">
+                        Shaojie Chen, <strong>Jiayi E. Xu</strong>. "An Automated Reduction Framework for High-Dimensional Instrumentation Data." 
+                        <em>IEEE Conference on Data Engineering</em>, 2024.
+                    </li>
+                </ul>
+            </div>
+        
+            <div class="collapsible-header-wrapper">
+                <h2 class="section-header-sub"> Conferences & Talks</h2>
+            </div>
+            <div class="collapsible-content">
+                <ul class="pub-list">
+                    <li class="pub-item">
+                        <strong>Jiayi E. Xu</strong> "Prototyping the next-generation
+                        spectrograph for space exploration: Digital Micromirror Device based Multi-object Spectrograph (DMD-MOS) calibration and
+                        performance assessment." <em>SPIE Astronomy Telescopes + Instruments</em>, 2026.
+                    </li>
+                    <!-- <li class="pub-item">
+                        Co-author A, <strong>Your Name</strong>. "An Automated Reduction Framework for High-Dimensional Instrumentation Data." <em>IEEE Conference on Data Engineering</em>, 2024.
+                    </li> -->
+                </ul>
+            </div>
+        
         </section>
 
         <!-- 4. 关于我页面 -->
@@ -413,12 +708,78 @@
                     Beside Academy, I also have lots of hobbies...
                 </p>
                 <p>
-                    Fun fact about me:
-                    <img src="Marathon.jpg" alt="Research Diagram" class="hobbie-img"> 
+                    <!-- Fun fact about me: -->
+                    <!-- <img src="Marathon.jpg" alt="Research Diagram" class="hobbie-img">  -->
                 </p> 
 
             
             </div>
+            <div class="research-grid">
+                <div class="research-card">
+                    <h3>Sports</h3>
+                    <!-- <p>Marathon</p> -->
+                    <!-- <div class="research-more">
+                        <img src="Marathon.jpg" alt="Research Diagram" class="research-img"> 
+                    </div> -->
+
+                    <div class="research-card">
+                        <!-- <h3>Sports</h3> -->
+                        <p> 2026 Toronto Marathon 5km</p>
+                        <div class="research-more">
+                            <!-- <img src="Marathon.jpg" alt="Research Diagram" class="research-img">  -->
+                        </div>
+                    </div>
+                    <div class="research-card">
+                        <!-- <h3>Sports</h3> -->
+                        <p>Swim</p>
+                        <div class="research-more">
+                            <!-- <img src="Marathon.jpg" alt="Research Diagram" class="research-img">  -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="research-card">
+                    <h3>Painting</h3>
+                    <p>some discription here</p>
+                    <div class="research-more">
+                        <!-- <img src="Marathon.jpg" alt="Research Diagram" class="research-img">  -->
+                    </div>
+                </div>
+
+
+                <div class="research-card">
+                    <h3>Fun facts</h3>
+                    <div class="research-card">
+                        <!-- <h3>Sports</h3> -->
+                        <p> Montreal</p>
+                        <div class="research-more">
+                            <!-- <img src="Marathon.jpg" alt="Research Diagram" class="research-img">  -->
+                        </div>
+                    </div>
+                    <div class="research-card">
+                        <!-- <h3>Sports</h3> -->
+                        <p>idk</p>
+                        <div class="research-more">
+                            <!-- <img src="Marathon.jpg" alt="Research Diagram" class="research-img">  -->
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="research-card">
+                    <h3>Cat</h3>
+                    <p>NanXing</p>
+                    <div class="research-more">
+                        <p style="color: var(--text-muted); font-size: 0.95rem;">
+                            My bb❤️
+                        </p>
+                        <!-- <img src="research2.jpg" alt="Research Diagram" class="research-img"> -->
+                    </div>
+                </div>
+
+            </div>
+
+
         </section>
 
     </div>
@@ -451,6 +812,41 @@
 
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
+
+        // ==========================================
+        // ✨ 新增：控制全屏详情页打开与关闭的函数
+        // ==========================================
+        function openResearchDetail(cardElement) {
+            const title = cardElement.querySelector('h3').innerHTML;
+            // 💡 核心修改：改抓取 .research-full-detail 内部的丰富长文
+            const fullContent = cardElement.querySelector('.research-full-detail').innerHTML;
+            
+            document.getElementById('detailContent').innerHTML = `
+                <h2>${title}</h2>
+                <div>${fullContent}</div>
+            `;
+            
+            document.getElementById('researchDetailPage').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeResearchDetail() {
+            // 关闭全屏详情页
+            document.getElementById('researchDetailPage').classList.remove('active');
+            // 恢复主页面滚动
+            document.body.style.overflow = 'auto';
+        }
     </script>
+
+    <!--jump into new page-->
+    <div id="researchDetailPage" class="research-detail-page">
+        <div class="detail-container">
+            <button class="back-btn" onclick="closeResearchDetail()">
+                <i class="fa-solid fa-arrow-left"></i> Back to Research
+            </button>
+            <div id="detailContent" class="detail-content">
+                </div>
+        </div>
+    </div>
 </body>
 </html>
