@@ -408,6 +408,127 @@
         .research-full-detail {
             display: none;
         }
+        /* ==========================================
+        🃏 终极稳固版：固定比例 + 整体缩小卡牌墙
+        ========================================== */
+
+        /* 1. 稳固的网格布局：整体缩小尺寸，一行横向能排 4-5 个 */
+        .card-wall-grid-fixed {
+            display: grid;
+            /* 💡 核心修改：将最小宽度缩到 180px，确保网页版一行能塞下更多卡片 */
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px; /* 卡牌之间的空隙保持 15px */
+            width: 100%;
+            margin-top: 3rem;
+            clear: both;
+        }
+
+        /* 2. 3D 翻转外壳：通过 aspect-ratio 强制固定比例，彻底解决重合问题 */
+        .flip-card-container {
+            background-color: transparent;
+            /* 💡 满足需求：这里我设置成了 1/1（完美的正方形照片墙，非常洋气）
+            如果你想改成 4:3，只需要把下面改成 aspect-ratio: 4 / 3; 即可！ */
+            aspect-ratio: 1 / 1; 
+            
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        /* 3. 卡牌主体 */
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+            transform-style: preserve-3d;
+        }
+
+        .flip-card-container:hover .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        /* 4. 正反面共有属性：强行接管高宽，死死对齐 */
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            
+            /* 切角效果 */
+            clip-path: polygon(12px 0px, calc(100% - 12px) 0px, 100% 12px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 12px 100%, 0px calc(100% - 12px), 0px 12px);
+        }
+
+        /* 5. 🃏 卡牌正面 */
+        .flip-card-front {
+            background-color: var(--bg-dark-cosmic);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+            z-index: 2;
+        }
+
+        /* 正面背后的虚化图 */
+        .card-bg-blur {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            object-fit: cover;
+            z-index: 1;
+            filter: blur(6px);
+            opacity: 0.22;
+        }
+
+        /* 正面内嵌金边线 */
+        .flip-card-front::after {
+            content: '';
+            position: absolute;
+            top: 3px; left: 3px; right: 3px; bottom: 3px;
+            border: 1px solid var(--accent-gold);
+            opacity: 0.4;
+            z-index: 2;
+            pointer-events: none;
+            clip-path: polygon(11px 0px, calc(100% - 11px) 0px, 100% 11px, 100% calc(100% - 11px), calc(100% - 11px) 100%, 11px 100%, 0px calc(100% - 11px), 0px 11px);
+        }
+
+        /* 正面文字：适当缩小适应小卡牌 */
+        .card-front-title {
+            position: relative;
+            z-index: 3;
+            font-family: 'Playfair Display', serif;
+            color: var(--accent-gold);
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .card-front-desc {
+            position: relative;
+            z-index: 3;
+            color: var(--accent-gold-light);
+            font-size: 0.75rem;
+            opacity: 0.8;
+        }
+
+        /* 6. 🃏 卡牌背面：外嵌金边 */
+        .flip-card-back {
+            background-color: #000;
+            transform: rotateY(180deg);
+            box-shadow: inset 0 0 0 2px var(--accent-gold); 
+            z-index: 1;
+        }
+
+        /* 背面清晰图：object-fit: cover 确保就算原图比例不完美，也能自动裁剪填满且不变形 */
+        .card-img-clear {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; 
+            display: block;
+        }
 
         /* ==========================================
         ✨ 新增：学术历程标题折叠抽屉样式
@@ -528,7 +649,18 @@
                 </div>
                 <!-- <span class="'text">more about me</span>
                 <p>jdfgsdfjdjsfffffff</p> -->
+                
             </div>
+            <p> Jiayi Xu (Emma) is a Master's student in the Department of Physics at the University of Toronto who works 
+                on multi-object spectrograph development and balloon-borne telescope instrumentation. Her current research 
+                focuses on optical system design, calibration, and performance evaluation, as well as synthetic photometry 
+                studies for instrument characterization and planning. She plays an important role in bridging engineering 
+                designs with scientific objectives by building tools like exposure time calculators to help evaluate system 
+                capability and optimize science target selection. She completed her Honours Bachelor of Science with High 
+                Distinction at the University of Toronto with the department of Astronomy, where she gained experience in 
+                statistical analysis, advanced programming, hands-on experiments, and theoretical studies on early-Universe 
+                evolution. Her interest in optical astronomical instrumentation fuels her passion to further her graduate education.
+            </p>
         </section>
 
         <!---2. Research 页面-->
@@ -538,10 +670,13 @@
             <div class="research-grid">
                 <div class="research-card" onclick="openResearchDetail(this)">
                     <h3>DMD-MOS</h3>
-                    <p>multi-object spectrograph</p>
+                    <p>Digital Micromirror Device based Multi-Object Spectrograph (DMD-MOS) used a DMD to instantly configure multi-slits masks for the
+                        incoming telescope field, thus minimizing telescope overhead and facilitating efficient observing for hundreds of targets, which is an
+                        absolute game changer of next generation multi-objects spectrograph.
+                    </p>
                     <div class="research-more">
                         <p style="color: var(--text-muted); font-size: 0.95rem;">
-                            what is it? <br><br>
+                            I lead the worked on assembly, optical alignment, system performance testing and science data capturing of the project.
                             
                         </p>
                         <a href="https://www.dunlap.utoronto.ca/dmd-mos/">DMD-MOS website</a>
@@ -552,13 +687,27 @@
                     </div>
                     
                     <div class="research-full-detail">
+                        Project website: <a href="https://www.dunlap.utoronto.ca/dmd-mos/">DMD-MOS website</a>
+                        <!-- <img src="research1.jpg" alt="Research Diagram"> -->
                         <p class="detail-text">
-                            <!-- 这里可以撰写你极其详尽的项目解析、公式推导、学术突破点、以及长篇大论...
-                            <br><br>
-                            你甚至可以在这里加上很多长句、段落和具体的会议论文摘要。 -->
+                            Abandoning the traditional approaches to multi-object spectrographs, DMD-MOS 
+                            (Digital Micro-mirror Device-based Multi-Object Spectrograph) leverages a robust, 
+                            elegant approach for mask creation. DMDs are arrays of microscopic flat mirrors where 
+                            each micro-mirror can be addressed to selectively flip between two discrete angles. 
+                            With this in mind, we have designed two optical channels for DMD-MOS - one for each of 
+                            these two discrete positions: 1) an imaging channel that can be used for multi-object 
+                            target selection and 2) a spectrograph channel. By leveraging this feature, the DMD-MOS 
+                            can simultaneously image the field of view (FOV) and disperse the selected targets.
+                            In this work, we present the results of our laboratory testing of DMD-MOS including 
+                            spectral resolution, line spread function, wavelength coverage, and the mapping between 
+                            the DMD and imaging channel planes, the latter of which enables DMD-MOS and our control 
+                            software to instantaneously configure the DMD to observe the chosen target(s) in the 
+                            acquisition field.
                         </p>
-                        <img src="research1.jpg" alt="详细实验图解 1">
-                        <img src="research1_data.jpg" alt="详细实验图解 2">
+                        <!-- <img src="Vega spectrum.jpg" alt="Research Diagram"> -->
+                         Paper link:
+                         Poster link:
+
                     </div>
                     
                 </div>
@@ -671,13 +820,13 @@
                         "Prototyping the next-generation spectrograph for space exploration: Digital Micromirror Device based 
                         Multi-object Spectrograph (DMD-MOS) calibration and performance assessment." 
                         <em>SPIE Astronomy Telescopes + Instruments</em>, 2026.
-                    <li class="pub-item">
+                    <!-- <li class="pub-item">
                         Sarik Jeram, <strong>Jiayi E. Xu</strong>. "An Automated Reduction Framework for High-Dimensional Instrumentation Data." 
                         <em>IEEE Conference on Data Engineering</em>, 2024.
-                    </li>
+                    </li> -->
                     <li class="pub-item">
-                        Shaojie Chen, <strong>Jiayi E. Xu</strong>. "An Automated Reduction Framework for High-Dimensional Instrumentation Data." 
-                        <em>IEEE Conference on Data Engineering</em>, 2024.
+                        Shaojie Chen, <strong>Jiayi E. Xu</strong>. "Prototyping ... " 
+                        <em>SPIE Astronomy Telescopes + Instruments</em>, 2026.
                     </li>
                 </ul>
             </div>
@@ -702,80 +851,127 @@
 
         <!-- 4. 关于我页面 -->
         <section id="about" class="page-section">
-            <h2 class="section-header">About Me</h2>
-            <div class="about-content">
-                <p>
-                    Beside Academy, I also have lots of hobbies...
-                </p>
-                <p>
-                    <!-- Fun fact about me: -->
-                    <!-- <img src="Marathon.jpg" alt="Research Diagram" class="hobbie-img">  -->
-                </p> 
+            <h2 class="section-header">My gallery</h2>
+            <div class="card-wall-grid-fixed">
 
+                <div class="flip-card-container">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <img src="working_at_CAO.jpg" class="card-bg-blur" alt="blur-bg">
+                            <div class="card-front-title">Observatory Visit</div>
+                            <div class="card-front-desc">I'm with my DMD-MOS research team at Carr Observatory for spectrum capture.</div>
+                        </div>
+                        <div class="flip-card-back">
+                            <img src="working_at_CAO.jpg" class="card-img-clear" alt="clear-photo">
+                        </div>
+                    </div>
+                </div>
             
-            </div>
-            <div class="research-grid">
-                <div class="research-card">
-                    <h3>Sports</h3>
-                    <!-- <p>Marathon</p> -->
-                    <!-- <div class="research-more">
-                        <img src="Marathon.jpg" alt="Research Diagram" class="research-img"> 
-                    </div> -->
-
-                    <div class="research-card">
-                        <!-- <h3>Sports</h3> -->
-                        <p> 2026 Toronto Marathon 5km</p>
-                        <div class="research-more">
-                            <!-- <img src="Marathon.jpg" alt="Research Diagram" class="research-img">  -->
+                <div class="flip-card-container">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <img src="photo_portrait_1.jpg" class="card-bg-blur" alt="blur-bg">
+                            <div class="card-front-title">Conference Talk</div>
+                            <div class="card-front-desc">Toronto · Presentation Session</div>
                         </div>
-                    </div>
-                    <div class="research-card">
-                        <!-- <h3>Sports</h3> -->
-                        <p>Swim</p>
-                        <div class="research-more">
-                            <!-- <img src="Marathon.jpg" alt="Research Diagram" class="research-img">  -->
+                        <div class="flip-card-back">
+                            <img src="photo_portrait_1.jpg" class="card-img-clear" alt="clear-photo">
                         </div>
                     </div>
                 </div>
-
-                <div class="research-card">
-                    <h3>Painting</h3>
-                    <p>some discription here</p>
-                    <div class="research-more">
-                        <!-- <img src="Marathon.jpg" alt="Research Diagram" class="research-img">  -->
-                    </div>
-                </div>
-
-
-                <div class="research-card">
-                    <h3>Fun facts</h3>
-                    <div class="research-card">
-                        <!-- <h3>Sports</h3> -->
-                        <p> Montreal</p>
-                        <div class="research-more">
-                            <!-- <img src="Marathon.jpg" alt="Research Diagram" class="research-img">  -->
+            
+                <div class="flip-card-container">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <img src="photo_square_1.jpg" class="card-bg-blur" alt="blur-bg">
+                            <div class="card-front-title">Laboratory Work</div>
+                            <div class="card-front-desc">Data Pipeline Pipeline</div>
                         </div>
-                    </div>
-                    <div class="research-card">
-                        <!-- <h3>Sports</h3> -->
-                        <p>idk</p>
-                        <div class="research-more">
-                            <!-- <img src="Marathon.jpg" alt="Research Diagram" class="research-img">  -->
+                        <div class="flip-card-back">
+                            <img src=".jpg" class="card-img-clear" alt="clear-photo">
                         </div>
                     </div>
                 </div>
 
-
-                <div class="research-card">
-                    <h3>Cat</h3>
-                    <p>NanXing</p>
-                    <div class="research-more">
-                        <p style="color: var(--text-muted); font-size: 0.95rem;">
-                            My bb❤️
-                        </p>
-                        <!-- <img src="research2.jpg" alt="Research Diagram" class="research-img"> -->
+                <div class="flip-card-container">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <img src="swim.jpg" class="card-bg-blur" alt="blur-bg">
+                            <div class="card-front-title">I'm an amateur swimmer</div>
+                            <div class="card-front-desc">I have achieved national 2nd level athlete
+                                on free-style swimming when I was 12. Planning to attend open water compitition.
+                            </div>
+                        </div>
+                        <div class="flip-card-back">
+                            <img src="swim.jpg" class="card-img-clear" alt="clear-photo">
+                        </div>
                     </div>
                 </div>
+                <div class="flip-card-container">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <img src="painting.jpg" class="card-bg-blur" alt="blur-bg">
+                            <div class="card-front-title">Artworks</div>
+                            <div class="card-front-desc">I like painting using acrylic and color pencil. 
+                                I passed national 10th level (highest) on Chinese caligraphy when I was 12.
+                            </div>
+                        </div>
+                        <div class="flip-card-back">
+                            <img src="painting.jpg" class="card-img-clear" alt="clear-photo">
+                        </div>
+                    </div>
+                </div>
+                <div class="flip-card-container">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <img src="volunteer.jpg" class="card-bg-blur" alt="blur-bg">
+                            <div class="card-front-title">Volunteer for international events!</div>
+                            <div class="card-front-desc">I was a volunteer for International Skate competetion 2025, 
+                                tcs Toronto water front marathon 2025, UofT astrotours 2022-2025.
+                            </div>
+                        </div>
+                        <div class="flip-card-back">
+                            <img src="volunteer.jpg" class="card-img-clear" alt="clear-photo">
+                        </div>
+                    </div>
+                </div>
+                <div class="flip-card-container">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <img src="Marathon.jpg" class="card-bg-blur" alt="blur-bg">
+                            <div class="card-front-title">Toronto Marathon 2026</div>
+                            <div class="card-front-desc">My first 5k Marathon! Very special moment. With 2 months training, 
+                                from can't run 200m to a long-distance non-stop running achievement!
+                            </div>
+                        </div>
+                        <div class="flip-card-back">
+                            <img src="Marathon.jpg" class="card-img-clear" alt="clear-photo">
+                        </div>
+                    </div>
+                </div>
+                <div class="flip-card-container">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <img src="cat.jpg" class="card-bg-blur" alt="blur-bg">
+                            <div class="card-front-title">My baby boy ❤️</div>
+                            <div class="card-front-desc">He's name is Nanxing (南星), he was born in 2025 September.
+                                 His name directly translate as "southen star", which was based on a traditional Chinese medicine.</div>
+                        </div>
+                        <div class="flip-card-back">
+                            <img src="cat.jpg" class="card-img-clear" alt="clear-photo">
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+
+
+
+
+
 
             </div>
 
