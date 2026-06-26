@@ -239,6 +239,14 @@
             border: 1px solid rgba(255,255,255,0.1);
             display: block;
         }
+        .research-img1 {
+            width: 75%;          /* 💡 改成你想要的 70% 或 80% */
+            max-width: 100%;     /* 确保安全 */
+            margin: 20px auto 0; /* 💡 auto 会自动让图片在容器里居中 */
+            display: block;      /* 必须是 block 才能居中 */
+            border-radius: 6px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
 
         .research-card:hover {
             transform: scale(1.04); /* 卡片温和放大 */
@@ -608,7 +616,60 @@
             .hero-text { margin-top: 20px; }
             .nav-links { gap: 1.5rem; }
         }
+        /* ==========================================
+        📱 移动端强力适配与优化（救火专用）
+        ========================================== */
+        @media (max-width: 768px) {
+            /* 1. 修复顶部磨砂玻璃目录看全的问题 */
+            nav {
+                padding: 0.8rem 5% !important;
+                flex-direction: column; /* 手机端名字和目录上下排开，腾出空间 */
+                gap: 0.5rem;
+            }
+            .nav-links {
+                gap: 1.2rem !important; /* 缩短目录文字之间的距离 */
+            }
+            .nav-links a {
+                font-size: 0.85rem !important; /* 手机端字体略微缩小 */
+            }
+
+            /* 2. 修复主页头像被裁切、文字被挡住的问题 */
+            .hero-banner {
+                height: 100px !important; /* 手机端横幅变矮 */
+            }
+            .hero-grid {
+                grid-template-columns: 1fr !important; /* 强行单列排版 */
+                margin-top: -50px !important; /* 稍微往上提 */
+                gap: 1.5rem !important;
+            }
+            .profile-container {
+                max-width: 180px !important; /* 限制手机端头像大小 */
+                margin: 0 auto !important;
+            }
+            .profile-img {
+                width: 100% !important;
+                height: auto !important; /* 💡 核心修复：防止手机端图片高度拉伸和裁切 */
+                aspect-ratio: 1 / 1 !important;
+            }
+            .hero-text {
+                margin-top: 0 !important; /* 清除过大的间距 */
+                text-align: center;
+            }
+            .hero-text h1 {
+                font-size: 2rem !important; /* 名字小一点，不换行 */
+            }
+
+            /* 3. 各板块标题防挡 */
+            .section-header {
+                margin-top: 40px !important; /* 躲开手机端双层导航栏 */
+            }
+            .section-header.sub-style {
+                margin-top: 10px !important;
+            }
+        }
+        
     </style>
+    
 </head>
 <body>
 
@@ -642,9 +703,21 @@
                     <h1>Jiayi (Emma) Xu</h1>
                     <!-- <h2>徐嘉仪</h2> -->
                     <ul class="contact-list">
-                        <li><i class="fa-solid fa-graduation-cap"></i> Department of physics, University of Toronto</li>
-                        <li><i class="fa-solid fa-envelope"></i> emmajiayi.xu@mail.utoronto.ca</li>
-                        <li><i class="fa-solid fa-location-dot"></i> Toronto, ON, Canada</li>
+                        <li>
+                            <a href="https://www.physics.utoronto.ca/members/xu-jiayi/" target="_blank" style="text-decoration: none;">
+                                <i class="fa-solid fa-graduation-cap"></i> Department of physics, University of Toronto
+                            </a>
+                        </li>
+                        <li>
+                            
+                            <a href="mailto:emmajiayi.xu@mail.utoronto.ca" style="text-decoration: underline;">
+                                <i class="fa-solid fa-envelope"></i> emmajiayi.xu@mail.utoronto.ca
+                            </a>
+                        </li>
+                        <li><a href="https://maps.google.com/?q=McLennan+Physical+Laboratories+University+of+Toronto" target="_blank" style="text-decoration: none;">
+                            <i class="fa-solid fa-location-dot"></i> Toronto, ON, Canada
+                        </a> 
+                    </li>
                     </ul>
                 </div>
                 <!-- <span class="'text">more about me</span>
@@ -665,6 +738,7 @@
 
         <!---2. Research 页面-->
         <section id="research" class="page-section">
+    
             <h2 class="section-header">Research Projects</h2>
             
             <div class="research-grid">
@@ -696,7 +770,7 @@
                 
                     <div class="research-full-detail">
                         Project website: <a href="https://www.dunlap.utoronto.ca/dmd-mos/">DMD-MOS website</a>
-                        <img src="DMD_design.png" alt="Research Diagram">
+                        <img src="DMD_design.png" alt="Research Diagram" class="research-img1">
                         <p class="detail-text">
                             Abandoning the traditional approaches to multi-object spectrographs, DMD-MOS 
                             (Digital Micro-mirror Device-based Multi-Object Spectrograph) leverages a robust, 
@@ -712,7 +786,7 @@
                             software to instantaneously configure the DMD to observe the chosen target(s) in the 
                             acquisition field.
                         </p>
-                        <img src="Vega.png" alt="Research Diagram">
+                        <img src="Vega.png" alt="Research Diagram" class="research-img1">
                         <h4>Paper link:</h4>
                         <li class="pub-item">
                             <strong>Jiayi E. Xu</strong>, Sarik Jeram, Shaojie Chen, Ziang Chen,
@@ -763,89 +837,59 @@
                             <br><br>
                             你甚至可以在这里加上很多长句、段落和具体的会议论文摘要。 -->
                         </p>
-                        <img src="GigaBITRender.png" alt="详细实验图解 1">
-                        <img src="filters.png" alt="详细实验图解 2">
-                        <img src="time_distributor.png" alt="详细实验图解 3">
+                        <img src="GigaBITRender.png" alt="详细实验图解 1" class="research-img1">
+                        <img src="filters.png" alt="详细实验图解 2" class="research-img1">
+                        <img src="time_distributor.png" alt="详细实验图解 3" class="research-img1">
                     </div>
-                    
+                </div> 
+            </div>
+        
+            <h2 class="section-header sub-style">Archived Projects</h2>
+        
+            <div class="research-grid">
+                <div class="research-card">
+                    <h3>Gravitational Wave simulation during Cosmic Inflation</h3>
+                    <p style="color: var(--text-muted); font-size: 0.95rem;">Supervisor: Prof. Renee Hlozek (UofT)</p>
+                    <div class="research-more"> 
+                    <img src="pre-heating.png" class="research-img">
+                        
+                    <img src="inflation-results.png" class="research-img">
+                    </div>
                 </div>
-            <!-- </div> -->
-
-            <!-- <div class="research-grid">
-                <h2 class="section-header">Archieved Projects</h2>
-                <div class="research-card" onclick="openResearchDetail(this)">
-                    <h3>GigaBIT</h3>
-                    <p>Giga-pixel Balloon Borne Imaging Telescope</p>
-                    <p style="color: var(--text-muted); font-size: 0.95rem;">
-                        Assembly, Optical Alignment, Calibration, System Performance Tests, Sky Tests.
-                    </p>
-
-                    
+                
+                <div class="research-card">
+                    <h3>Grating efficiency and Wavefront Error tests for Gemini</h3>
+                    <p style="color: var(--text-muted); font-size: 0.95rem;">Supervisor: Prof. Suresh Sivanandam (UofT)</p>
                     <div class="research-more">
-                        <p style="color: var(--text-muted); font-size: 0.95rem;">
-                            what is it? <br><br>
-                            Filter selection
-                        </p>
-                        <img src="research2.jpg" alt="Research Diagram" class="research-img"> 
                     
+                    <img src="grating_tests.jpeg" class="research-img">
+                        
+                    <img src="wavefront result.png" class="research-img">
                         
                     </div>
                 </div>
+            </div> 
 
-                <div class="research-card" onclick="openResearchDetail(this)">
-                    <h3>GigaBIT</h3>
-                    <p>Giga-pixel Balloon Borne Imaging Telescope</p>
-                    <p style="color: var(--text-muted); font-size: 0.95rem;">
-                        Assembly, Optical Alignment, Calibration, System Performance Tests, Sky Tests.
-                    </p>
 
-                    <img src="research2.jpg" alt="Research Diagram" class="research-img"> 
-                    <div class="research-more">
-                        <p style="color: var(--text-muted); font-size: 0.95rem;">
-                            what is it? <br><br>
-                            Filter selection
-                        </p>
-                        <a href="https://www.gigabitastro.com/">GigaBIT website</a>
-                        
-                    </div>
-                </div> -->
+            <div class="highlight-box">
+                <h4>Research Insterests</h4>
+                <p>Optics related astronomical instrumentations:
+                    <br> Ground-based, space-based, balloon-based telescopes & spectrographs.
+                    <br> System Design, Assembly, Alignment, Calibration. 
+                    <br> Science cases study for instruments.
+                </p>
+            </div> 
+            <div class="highlight-box">
+                <h4>Core Research Skills & Strengths</h4>
+                <p>Python, MATLAB, LATEX, HTML, Fortran.
+                    <br> Fisher matrix, Machine learning (Sequential methods), Statistical analysis.
+                    <br>
+                </p>
+            </div>
 
-                <!-- <div class="research-card" onclick="openResearchDetail(this)">
-                    <h3>GigaBIT</h3>
-                    <p>Giga-pixel Balloon Borne Imaging Telescope</p>
-                    <p style="color: var(--text-muted); font-size: 0.95rem;">
-                        Assembly, Optical Alignment, Calibration, System Performance Tests, Sky Tests.
-                    </p>
-
-                    <img src="research2.jpg" alt="Research Diagram" class="research-img"> 
-                    <div class="research-more">
-                        <p style="color: var(--text-muted); font-size: 0.95rem;">
-                            what is it? <br><br>
-                            Filter selection
-                        </p>
-                        <a href="https://www.gigabitastro.com/">GigaBIT website</a>
-                        
-                    </div>
-                </div> -->
-        <!-- </div> -->
-            
-
-                </div> <div class="highlight-box">
-                    <h4>Research Insterests</h4>
-                    <p>Optics related astronomical instrumentations:
-                        <br> Ground-based, space-based, balloon-based telescopes & spectrographs.
-                        <br> System Design, Assembly, Alignment, Calibration. 
-                        <br> Science cases study for instruments.
-                    </p>
-
-                </div> <div class="highlight-box">
-                    <h4>Core Research Skills & Strengths</h4>
-                    <p>Python, MATLAB, LATEX, HTML, Fortran.
-                        <br> Fisher matrix, Machine learning (Sequential methods), Statistical analysis.
-                        <br>
-                    </p>
-                </div>
         </section>
+
+
 
         <!-- 3. 学术履历与成果页面 -->
         <section id="academy" class="page-section">
@@ -912,15 +956,19 @@
             <div class="collapsible-content">
                 <ul class="pub-list">
                     <li class="pub-item">
+                        <!-- <a href="" target="_blank" style="color: inherit; text-decoration: none; display: block;"> -->
                         <strong>Jiayi E. Xu</strong>, Sarik Jeram, Shaojie Chen, Ziang Chen,
                         "Prototyping the next-generation spectrograph for space exploration: Digital Micromirror Device based 
                         Multi-object Spectrograph (DMD-MOS) calibration and performance assessment." 
-                        <em>SPIE Astronomy Telescopes + Instruments</em>, 2026.
+                        <em>SPIE Astronomy Telescopes + Instruments</em>, 2026. 
+                            <span style="color: var(--accent-gold); font-size: 0.85rem; margin-left: 10px;">[PDF]</span>
+                        <!-- </a> -->
                     <!-- <li class="pub-item">
                         Sarik Jeram, <strong>Jiayi E. Xu</strong>. "An Automated Reduction Framework for High-Dimensional Instrumentation Data." 
                         <em>IEEE Conference on Data Engineering</em>, 2024.
                     </li> -->
                     <li class="pub-item">
+                        
                         Shaojie Chen, <strong>Jiayi E. Xu</strong> et al. "	Prototyping the next-generation spectrograph for space 
                         exploration: DMD-Based Multi-Object Spectrograph Design and Production " 
                         <em>SPIE Astronomy Telescopes + Instruments</em>, 2026.
@@ -981,7 +1029,7 @@
                             <img src="Outreach.jpg" class="card-bg-blur" alt="blur-bg">
                             <div class="card-front-title">Outreach events</div>
                             <div class="card-front-desc"> I joined outreach events such as AstroTour host by UofT. 
-                                This was a picture took during post-pandemic, I was explain space-based telescopes and spaceships to the audiences
+                                The picture was taken during post-pandemic, I was explaining space-based telescopes and spaceships to the audiences
                                 with 3D printed models.</div>
                         </div>
                         <div class="flip-card-back">
@@ -1022,7 +1070,7 @@
                         <div class="flip-card-front">
                             <img src="painting.jpg" class="card-bg-blur" alt="blur-bg">
                             <div class="card-front-title">Artworks</div>
-                            <div class="card-front-desc">I like painting using acrylic and color pencil. 
+                            <div class="card-front-desc">I like painting with acrylic and color pencil. 
                                 I passed national 10th level (highest) on Chinese caligraphy when I was 12.
                             </div>
                         </div>
@@ -1064,7 +1112,7 @@
                         <div class="flip-card-front">
                             <img src="cat.jpg" class="card-bg-blur" alt="blur-bg">
                             <div class="card-front-title">My baby boy ❤️</div>
-                            <div class="card-front-desc">He's name is Nanxing (南星), he was born in 2025 September.
+                            <div class="card-front-desc">His name is Nanxing (南星), he was born in September 2025.
                                  His name directly translate as "southen star", which was based on a traditional Chinese medicine.</div>
                         </div>
                         <div class="flip-card-back">
