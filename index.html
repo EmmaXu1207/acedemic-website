@@ -232,20 +232,26 @@
             transition: var(--transition);
         }
 
-        .research-img {
+       /* 1. 保持原样：只控制露在最外面、Research Card 卡片里的图片（保持 100% 填满卡片） */
+        .research-card .research-img {
             width: 100%;
+            height: auto;
             margin-top: 15px;
             border-radius: 6px;
             border: 1px solid rgba(255,255,255,0.1);
             display: block;
         }
-        .research-img1 {
-            width: 75%;          /* 💡 改成你想要的 70% 或 80% */
-            max-width: 100%;     /* 确保安全 */
-            margin: 20px auto 0; /* 💡 auto 会自动让图片在容器里居中 */
-            display: block;      /* 必须是 block 才能居中 */
-            border-radius: 6px;
-            border: 1px solid rgba(255,255,255,0.1);
+
+        /* 2. 💡 满足新需求：【只】控制点进去全屏详情页（detail-content）内部的学术插图 */
+        /* 让它呈现字体宽度的 75%，并且在长文中优雅居中，绝对不影响最外面的卡片！ */
+        .detail-content .research-img {
+            width: 75% !important;  /* 强行缩放到字体宽度的 75% */
+            max-width: 100%;
+            margin: 25px auto !important; /* 上下留出 25px 空隙，auto 让图片左右完美居中 */
+            display: block;         /* 必须是 block 居中才会生效 */
+            border-radius: 12px;    /* 详情页大图配大圆角，更大气 */
+            border: 1px solid rgba(255,255,255,0.15);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3); /* 给大图加一点点高级的阴影沉降感 */
         }
 
         .research-card:hover {
@@ -257,7 +263,7 @@
         .research-card:hover h3 { color: var(--accent-gold); }
 
         .research-card:hover .research-more {
-            max-height: 500px; /* 展开高度 */
+            max-height: 800px; /* 展开高度 */
             opacity: 1;
             margin-top: 15px;
         }
@@ -610,61 +616,77 @@
         .pub-item { background: var(--card-bg); padding: 1.5rem 2rem; border-radius: 8px; margin-bottom: 1.2rem; border: 1px solid rgba(255,255,255,0.02); transition: var(--transition); }
         .pub-item:hover { transform: translateX(5px); border-color: rgba(255,255,255,0.1); }
 
-        @media (max-width: 768px) {
+        /* @media (max-width: 768px) {
             .hero-grid { grid-template-columns: 1fr; text-align: center; gap: 2rem; margin-top: -60px; }
             .profile-container { max-width: 220px; margin: 0 auto; }
             .hero-text { margin-top: 20px; }
             .nav-links { gap: 1.5rem; }
-        }
+        } */
         /* ==========================================
-        📱 移动端强力适配与优化（救火专用）
+        📱 移动端强力适配（去 Banner + 物理防挡版）
         ========================================== */
         @media (max-width: 768px) {
-            /* 1. 修复顶部磨砂玻璃目录看全的问题 */
+            /* 1. 手机端导航栏变为上下两排，防止字太挤 */
             nav {
-                padding: 0.8rem 5% !important;
-                flex-direction: column; /* 手机端名字和目录上下排开，腾出空间 */
-                gap: 0.5rem;
+                padding: 0.6rem 5% !important;
+                flex-direction: column; 
+                gap: 0.4rem;
             }
             .nav-links {
-                gap: 1.2rem !important; /* 缩短目录文字之间的距离 */
+                gap: 1rem !important; 
             }
             .nav-links a {
-                font-size: 0.85rem !important; /* 手机端字体略微缩小 */
+                font-size: 0.85rem !important;
             }
 
-            /* 2. 修复主页头像被裁切、文字被挡住的问题 */
+            /* 2. 核心拯救：直接把第一页的背景图干掉，改用大纯空行推下去 */
             .hero-banner {
-                height: 100px !important; /* 手机端横幅变矮 */
+                display: none !important; /* 👈 手机端彻底不要这个 banner 背景了 */
             }
+
             .hero-grid {
-                grid-template-columns: 1fr !important; /* 强行单列排版 */
-                margin-top: -50px !important; /* 稍微往上提 */
-                gap: 1.5rem !important;
+                grid-template-columns: 1fr !important; /* 强行单列 */
+                /* 💡 关键在这里：给顶部加 120 像素的巨额空间！
+                这样无论什么手机，头像都会稳稳当当地出现在双层导航栏的下方，绝对吞不掉 */
+                margin-top: 120px !important; 
+                gap: 1rem !important;
+                padding: 0 20px !important;
             }
+
+            /* 头像大小固定，居中，且不裁剪 */
             .profile-container {
-                max-width: 180px !important; /* 限制手机端头像大小 */
+                max-width: 160px !important;
                 margin: 0 auto !important;
+                box-shadow: 0 8px 24px rgba(0,0,0,0.4); /* 给头像加个高级的阴影 */
             }
             .profile-img {
                 width: 100% !important;
-                height: auto !important; /* 💡 核心修复：防止手机端图片高度拉伸和裁切 */
+                height: auto !important;
                 aspect-ratio: 1 / 1 !important;
+                object-fit: cover !important;
             }
+
+            /* 名字和头衔居中 */
             .hero-text {
-                margin-top: 0 !important; /* 清除过大的间距 */
+                margin-top: 0 !important;
                 text-align: center;
             }
             .hero-text h1 {
-                font-size: 2rem !important; /* 名字小一点，不换行 */
+                font-size: 1.8rem !important;
             }
 
-            /* 3. 各板块标题防挡 */
-            .section-header {
-                margin-top: 40px !important; /* 躲开手机端双层导航栏 */
+            /* 3. 其他所有页面（Research、Academy、About）的正常回归 */
+            /* 因为没有了 banner 捣乱，其他页只需要稍微往下推 80px 躲开导航栏即可 */
+            .page-section {
+                padding-top: 80px !important; 
             }
-            .section-header.sub-style {
-                margin-top: 10px !important;
+            #home.page-section {
+                padding-top: 0 !important; /* 第一页靠上面的 margin-top 控制，这里归零 */
+            }
+
+            /* 重置所有多余的间距干扰 */
+            .section-header, .section-header.sub-style {
+                margin-top: 0px !important;
             }
         }
         
@@ -683,7 +705,7 @@
             <a onclick="switchTab('home')" id="nav-home" class="active">Home</a>
             <a onclick="switchTab('research')" id="nav-research">Research</a>
             <a onclick="switchTab('academy')" id="nav-academy">Academy</a>
-            <a onclick="switchTab('about')" id="nav-about">Beyond Academy</a>
+            <a onclick="switchTab('about')" id="nav-about">Beyond</a>
         </div>
     </nav>
 
@@ -740,7 +762,7 @@
         <section id="research" class="page-section">
     
             <h2 class="section-header">Research Projects</h2>
-            
+            <h4>Click panels to check out more details for DMD-MOS and GigaBIT</h4>
             <div class="research-grid">
                 <div class="research-card" onclick="openResearchDetail(this)">
                     <h3>DMD-MOS</h3>
@@ -748,6 +770,8 @@
                     <a href="https://www.dunlap.utoronto.ca/dmd-mos/">DMD-MOS website</a>
                     
                     <img src="research1.jpg" alt="Research Diagram" class="research-img"> 
+                    <p style="color: var(--text-muted); font-size: 0.95rem;">
+                        Supervisors: Dr. Shaojie Chen, Dr. Sarik Jeram, Prof. Ting Li. (UofT)</p>
                     <!-- <div class="research-hover-text"> -->
                         <!-- <p style="color: var(--text-muted); font-size: 0.95rem;">
                                ✨ Click anywhere in the panel to check out more details about this research project
@@ -770,7 +794,7 @@
                 
                     <div class="research-full-detail">
                         Project website: <a href="https://www.dunlap.utoronto.ca/dmd-mos/">DMD-MOS website</a>
-                        <img src="DMD_design.png" alt="Research Diagram" class="research-img1">
+                        <img src="DMD_design.png" alt="Research Diagram" class="research-img">
                         <p class="detail-text">
                             Abandoning the traditional approaches to multi-object spectrographs, DMD-MOS 
                             (Digital Micro-mirror Device-based Multi-Object Spectrograph) leverages a robust, 
@@ -786,21 +810,37 @@
                             software to instantaneously configure the DMD to observe the chosen target(s) in the 
                             acquisition field.
                         </p>
-                        <img src="Vega.png" alt="Research Diagram" class="research-img1">
+                        <img src="Vega.png" alt="Research Diagram" class="research-img">
+                        <p class="detail-text">
+                        I led the integration and calibration phase, proving system robustness through successful 
+                        on-sky observations. By co-developing a homography-based tracking algorithm, I achieved 
+                        excellent spectrum matching and precision target allocation on the DMD micro-mirrors, 
+                        directly validating the instrument's exceptional optical reliability and high-fidelity performance.
+                        </p>
                         <h4>Paper link:</h4>
-                        <li class="pub-item">
-                            <strong>Jiayi E. Xu</strong>, Sarik Jeram, Shaojie Chen, Ziang Chen,
-                            "Prototyping the next-generation spectrograph for space exploration: Digital Micromirror Device based 
-                            Multi-object Spectrograph (DMD-MOS) calibration and performance assessment." 
-                            <em>SPIE Astronomy Telescopes + Instruments</em>, 2026.
-                        </li>
-                        <h4>Poster link:</h4>
-                        <li class="pub-item">
-                            <strong>Jiayi E. Xu</strong>, Sarik Jeram, Shaojie Chen, Ziang Chen,
-                            "Prototyping the next-generation spectrograph for space exploration: Digital Micromirror Device based 
-                            Multi-object Spectrograph (DMD-MOS) calibration and performance assessment." 
-                            <em>SPIE Astronomy Telescopes + Instruments</em>, 2026.
-                        </li>
+                        <ul class="pub-list">
+                            <li class="pub-item">
+                                <a href="SPIE_Paper.pdf" target="_blank" style="color: inherit; text-decoration: none; display: block;">
+                                    <strong>Jiayi E. Xu</strong>, Sarik Jeram, Shaojie Chen, Ting S. Li,  Ziang Chen, Zain Azam, Adi Khandelwal,
+                                    Mark Barnet, Yixuan Cheng, Suresh Sivanandam.
+                                    "Prototyping the next-generation spectrograph for space exploration: Digital Micromirror Device based 
+                                    Multi-object Spectrograph (DMD-MOS) calibration and performance assessment." 
+                                    <em>SPIE Astronomy Telescopes + Instruments</em>, 2026.
+                                    <span style="color: var(--accent-gold); font-size: 0.85rem; margin-left: 10px;">[PDF]</span>
+                                </a>
+                            </li>
+                            <h4>Poster link:</h4>
+                            <li class="pub-item">
+                                <a href="SPIE_Poster.pdf" target="_blank" style="color: inherit; text-decoration: none; display: block;">
+                                    <strong>Jiayi E. Xu</strong>, Sarik Jeram, Shaojie Chen, Ting S. Li,  Ziang Chen, Zain Azam, Adi Khandelwal,
+                                    Mark Barnet, Yixuan Cheng, Suresh Sivanandam.
+                                    "Prototyping the next-generation spectrograph for space exploration: Digital Micromirror Device based 
+                                    Multi-object Spectrograph (DMD-MOS) calibration and performance assessment." 
+                                    <em>SPIE Astronomy Telescopes + Instruments</em>, 2026.
+                                    <span style="color: var(--accent-gold); font-size: 0.85rem; margin-left: 10px;">[PDF]</span>
+                                </a>
+                            </li>
+                        </ul>
 
                     </div>
                 </div>   
@@ -811,35 +851,66 @@
                     <h3>GigaBIT</h3>
                     <p>Giga-pixel Balloon Borne Imaging Telescope</p>
                     <a href="https://www.gigabitastro.com/">GigaBIT website</a>
-                    <!-- <p style="color: var(--text-muted); font-size: 0.95rem;">
-                        Assembly, Optical Alignment, Calibration, System Performance Tests, Sky Tests.
-                    </p> -->
+                    
                     <img src="research2.jpg" alt="Research Diagram" class="research-img"> 
+                    <p style="color: var(--text-muted); font-size: 0.95rem;">
+                        Supervisors: Prof. Barth C. Netterfield, Prof. Ting Li. (UofT)
+                    </p>
 
                     <div class="research-more">
                         <p style="color: var(--text-muted); font-size: 0.95rem;">
                             My work: Filter design and science cases study.
                         </p>
                         
-                        <p> ✨ GigaBIT 
+                        <p> ✨ GigaBIT is a balloon borne telescope with 1.3m aperture. It contains 5 IMX811 detectors
+                            with 14 sets of filter including both classical broad band filters and specialized narrow band filters
+                            for more specific science studies.
+                            The estimation launch time for science observations is 2029 in New Zeland.
                         ✨ 
                         </p>
                         
                         
                     </div>
-                    <!-- <div class="research-hover-text">
-                        ✨ Click anywhere in the panel to check out more details about this research project
-                    </div> -->
-                    
                     <div class="research-full-detail">
+                        Project website: <a href="https://www.gigabitastro.com/">GigaBIT website</a>
                         <p class="detail-text">
-                            <!-- 这里可以撰写你极其详尽的项目解析、公式推导、学术突破点、以及长篇大论...
-                            <br><br>
-                            你甚至可以在这里加上很多长句、段落和具体的会议论文摘要。 -->
+                            GigaBIT (Giga-pixel Balloon Borne Imaging Telescope) was designed for deep, wide-field 
+                            multi-band surveys. Featuring a specialized near-ultraviolet (UV) and narrowband filter system, 
+                            its primary mission is to break classical stellar parameter degeneracies and reconstruct the 
+                            chemo-dynamical evolutionary history of the Milky Way. In addition, it could also bring time domain
+                            astronomical studies with the observation of a few different types of transients fullfilling the 
+                            observing limitation from ground-based telescopes.
                         </p>
-                        <img src="GigaBITRender.png" alt="详细实验图解 1" class="research-img1">
-                        <img src="filters.png" alt="详细实验图解 2" class="research-img1">
-                        <img src="time_distributor.png" alt="详细实验图解 3" class="research-img1">
+                        <img src="GigaBITRender.png" alt="GigaBIT" class="research-img">
+                        <p class="detail-text">
+                         I made a predictive bandpass-to-color 
+                         empirical model trained with sequential machine learning methods with PHOENIX stellar spectrum
+                         libraries. To bridge ideal synthetic photometry with hardware constraints, I integrated an 
+                         Exposure Time Calculator (ETC) as a dynamic noise engine, injecting realistic readout, dark 
+                         current, and atmospheric/sky background limits into the simulated flux measurements across 
+                         different filters. These noise-weighted color errors were then fed into a 4-dimensional Fisher 
+                         Information Matrix framework. By calculating the sensitivity derivatives within the parameter 
+                         space, this integrated pipeline successfully projects observational uncertainties directly back 
+                         into stellar parameter constraints, systematically accounting for the multi-parameter covariances 
+                         and correlations of effective temperature, surface gravity, metallicity and alpha elements abundance.
+                        </p>
+                        <img src="filters.png" alt="Filters" class="research-img">
+                        <p class="detail-text">
+                        Built apong the Fisher matrix, I further implemented a time-distribution optimization engine to maximize telescope observation 
+                        efficiency. Instead of employing uniform or empirical exposure times, this algorithmic optimizer 
+                        interprets specified scientific precision targets—such as separating the multiple stellar populations 
+                        (MSPs) within globular clusters or filtering out background field star contamination for dim 
+                        targets—and reverse-engineers the mathematical criteria into custom observation strategies. 
+                        The engine calculates the exact exposure time allocation required for each filter to reach the
+                         maximum scientific output per unit time, serving as a critical bridge between instrument 
+                         limitations and primary science goals. This framework transforms telescope design from experiential 
+                         guessing into a rigorous, automated workflow, proving that strategically allocated near-ultraviolet 
+                         (UV) and narrowband observations can drastically reduce the exposure budget while preserving the 
+                         multi-dimensional chemical tracking capabilities needed to reconstruct the chemo-dynamical history 
+                         of the Galaxy.
+                        </p>
+                        <img src="time_distributor.png" alt="Time distributor" class="research-img">
+                        Report coming in Sep 2026.
                     </div>
                 </div> 
             </div>
@@ -849,11 +920,13 @@
             <div class="research-grid">
                 <div class="research-card">
                     <h3>Gravitational Wave simulation during Cosmic Inflation</h3>
-                    <p style="color: var(--text-muted); font-size: 0.95rem;">Supervisor: Prof. Renee Hlozek (UofT)</p>
+                    <p style="color: var(--text-muted); font-size: 0.95rem;">Supervisor: Prof. Renée Hložek, Simran Nerval (UofT)</p>
                     <div class="research-more"> 
                     <img src="pre-heating.png" class="research-img">
-                        
+                    Simulated Stochastic Gravitational Wave Background (SGWB) emitted during inflation with lattice simulations 
+                    to explore the non-linear dynamics of the early universe using alpha-attractor models.
                     <img src="inflation-results.png" class="research-img">
+                    <a href="Jiayi_Xu_AST425_report.pdf" target="_blank">Click here to check out the Report</a>
                     </div>
                 </div>
                 
@@ -861,10 +934,12 @@
                     <h3>Grating efficiency and Wavefront Error tests for Gemini</h3>
                     <p style="color: var(--text-muted); font-size: 0.95rem;">Supervisor: Prof. Suresh Sivanandam (UofT)</p>
                     <div class="research-more">
-                    
                     <img src="grating_tests.jpeg" class="research-img">
-                        
+                    Designed the optical set up for GIRMOS (Gemini Infrared Multi-Object Spectrography) diffraction grating
+                        efficiency and wavefront examination. Tested with monochromic light for precise efficiency at different wavelength measurements.  
                     <img src="wavefront result.png" class="research-img">
+                    
+                    <a href="GIRMOS_report.pdf" target="_blank">Click here to check out the Report</a>
                         
                     </div>
                 </div>
@@ -883,7 +958,7 @@
                 <h4>Core Research Skills & Strengths</h4>
                 <p>Python, MATLAB, LATEX, HTML, Fortran.
                     <br> Fisher matrix, Machine learning (Sequential methods), Statistical analysis.
-                    <br>
+                    <br> Hands-on experiments (for optical projects): design, assemble and alignment.
                 </p>
             </div>
 
@@ -956,17 +1031,15 @@
             <div class="collapsible-content">
                 <ul class="pub-list">
                     <li class="pub-item">
-                        <!-- <a href="" target="_blank" style="color: inherit; text-decoration: none; display: block;"> -->
-                        <strong>Jiayi E. Xu</strong>, Sarik Jeram, Shaojie Chen, Ziang Chen,
-                        "Prototyping the next-generation spectrograph for space exploration: Digital Micromirror Device based 
-                        Multi-object Spectrograph (DMD-MOS) calibration and performance assessment." 
-                        <em>SPIE Astronomy Telescopes + Instruments</em>, 2026. 
+                        <a href="SPIE_Paper.pdf" target="_blank" style="color: inherit; text-decoration: none; display: block;">
+                            <strong>Jiayi E. Xu</strong>, Sarik Jeram, Shaojie Chen, Ting S. Li,  Ziang Chen, Zain Azam, Adi Khandelwal,
+                            Mark Barnet, Yixuan Cheng, Suresh Sivanandam.
+                            "Prototyping the next-generation spectrograph for space exploration: Digital Micromirror Device based 
+                            Multi-object Spectrograph (DMD-MOS) calibration and performance assessment." 
+                            <em>SPIE Astronomy Telescopes + Instruments</em>, 2026.
                             <span style="color: var(--accent-gold); font-size: 0.85rem; margin-left: 10px;">[PDF]</span>
-                        <!-- </a> -->
-                    <!-- <li class="pub-item">
-                        Sarik Jeram, <strong>Jiayi E. Xu</strong>. "An Automated Reduction Framework for High-Dimensional Instrumentation Data." 
-                        <em>IEEE Conference on Data Engineering</em>, 2024.
-                    </li> -->
+                        </a>
+                    </li>
                     <li class="pub-item">
                         
                         Shaojie Chen, <strong>Jiayi E. Xu</strong> et al. "	Prototyping the next-generation spectrograph for space 
@@ -982,9 +1055,12 @@
             <div class="collapsible-content">
                 <ul class="pub-list">
                     <li class="pub-item">
+                        <a href="https://spie.org/astronomical-telescopes-instrumentation/presentation/Prototyping-the-next-generation-spectrograph-for-space-exploration--digital/14149-434" 
+                        target="_blank" style="color: inherit; text-decoration: none; display: block;">
                         <strong>Jiayi E. Xu</strong> "Prototyping the next-generation
                         spectrograph for space exploration: Digital Micromirror Device based Multi-object Spectrograph (DMD-MOS) calibration and
                         performance assessment." <em>SPIE Astronomy Telescopes + Instruments</em>, 2026.
+                        </a>
                     </li>
                     <!-- <li class="pub-item">
                         Co-author A, <strong>Your Name</strong>. "An Automated Reduction Framework for High-Dimensional Instrumentation Data." <em>IEEE Conference on Data Engineering</em>, 2024.
@@ -997,8 +1073,10 @@
             <div class="collapsible-content">
                 <ul class="pub-list">
                     <li class="pub-item">
-                        Jiayi Xu CV 
-                        <!-- maybe a preview of the pdf? -->
+                        <a href="CV.pdf" target="_blank" style="color: inherit; text-decoration: none; display: block;">
+                            <strong>Jiayi E. Xu CV</strong>
+                            <span style="color: var(--accent-gold); font-size: 0.85rem; margin-left: 10px;">[PDF]</span>
+                        </a>
                     </li>
                 </ul>
             </div>
@@ -1042,8 +1120,8 @@
                     <div class="flip-card-inner">
                         <div class="flip-card-front">
                             <img src=".jpg" class="card-bg-blur" alt="blur-bg">
-                            <div class="card-front-title">Something cool</div>
-                            <div class="card-front-desc">what else cool stuff i do?</div>
+                            <div class="card-front-title">Conference talk</div>
+                            <div class="card-front-desc">SPIE Astronomical telescopes + instrumentation 2026</div>
                         </div>
                         <div class="flip-card-back">
                             <img src=".jpg" class="card-img-clear" alt="clear-photo">
